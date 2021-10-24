@@ -17,4 +17,4 @@ const vehicleSchema = new Schema<IVehicle>({
     },
 });
 
-export default models.Person || model<IVehicle>('Person', vehicleSchema);
+export default models.Vehicle || model<IVehicle>('Vehicle', vehicleSchema);
