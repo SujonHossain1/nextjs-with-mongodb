@@ -1,9 +1,10 @@
 import { ObjectId } from 'mongoose';
 
-export interface IPerson {
+export interface IPerson extends Document {
     _id?: string;
     name: string;
     email: string;
+    password: string;
 }
 
 export interface IVehicle {
