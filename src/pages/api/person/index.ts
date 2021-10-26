@@ -1,29 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from 'server/database';
+import authenticated from 'server/middleware/authenticated';
 import Person from 'server/models/person';
 
 dbConnect();
 
-const getPersons = async (req: NextApiRequest, res: NextApiResponse) => {
-    switch (req.method) {
-        case 'GET': {
-            try {
-                const person = await Person.find({});
-                return res.status(200).json({
-                    success: true,
-                    data: person,
-                    message: '',
-                });
-            } catch (err) {
-                const { message } = err as Error;
-                return res.status(500).json({
-                    success: false,
-                    data: null,
-                    message: message,
-                });
-            }
-        }
-        case 'POST': {
+const createPerson = authenticated(
+    async (req: NextApiRequest, res: NextApiResponse) => {
+        if (req.method === 'POST') {
             try {
                 const person = await Person.create(req.body);
                 return res.status(201).json({
@@ -39,16 +23,24 @@ const getPersons = async (req: NextApiRequest, res: NextApiResponse) => {
                     message,
                 });
             }
-        }
-
-        default: {
+        } else if (req.method === 'GET') {
+            const persons = await Person.find({}).select({
+                password: 0,
+                __v: 0,
+            });
+            res.status(200).json({
+                success: true,
+                data: {
+                    persons,
+                },
+                message: '',
+            });
+        } else {
             res.status(404).json({
-                success: false,
-                data: null,
-                message: '404 Not Found',
+                message: '404, Not Found',
             });
         }
     }
-};
+);
 
-export default getPersons;
+export default createPerson;
