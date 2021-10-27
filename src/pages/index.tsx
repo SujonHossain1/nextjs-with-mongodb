@@ -1,11 +1,18 @@
-import type { NextPage } from 'next';
+import { Container } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import { GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import styles from '../../styles/Home.module.css';
+import CardItem from 'src/components/Card';
+import { IProduct } from 'types';
 
-const Home: NextPage = () => {
+interface IProps {
+    products: IProduct[];
+}
+
+const index: NextPage<IProps> = ({ products }: IProps) => {
     return (
-        <div className={styles.container}>
+        <>
             <Head>
                 <title>Create Next App</title>
                 <meta
@@ -14,14 +21,39 @@ const Home: NextPage = () => {
                 />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-
-            <main className={styles.main}>
-                <Link href="/people">
-                    <a>People</a>
-                </Link>
+            <main>
+                <Container maxWidth="lg">
+                    <Grid container spacing={2}>
+                        {products.map((product) => (
+                            <Grid item xs={4} key={product._id}>
+                                <Link
+                                    href="/product/[id]"
+                                    as={`/product/${product.url}`}
+                                >
+                                    <a>
+                                        <CardItem product={product} />
+                                    </a>
+                                </Link>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Container>
             </main>
-        </div>
+        </>
     );
 };
 
-export default Home;
+export const getStaticProps: GetStaticProps = async (ctx) => {
+    const res = await fetch(
+        'https://dynobd-ecommerce.herokuapp.com/api/products'
+    );
+    const data = await res.json();
+
+    return {
+        props: {
+            products: data,
+        },
+    };
+};
+
+export default index;

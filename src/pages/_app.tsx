@@ -1,6 +1,8 @@
 import { orange } from '@mui/material/colors';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Box } from '@mui/system';
 import type { AppProps } from 'next/app';
+import Header from 'src/components/Header/Header';
 import '../../styles/globals.css';
 
 declare module '@mui/material/styles' {
@@ -25,7 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         palette: {
             primary: {
                 // light: will be calculated from palette.primary.main,
-                main: '#ff4400',
+                main: '#ff9900',
                 // dark: will be calculated from palette.primary.main,
                 // contrastText: will be calculated to contrast with palette.primary.main
             },
@@ -47,7 +49,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     return (
         <ThemeProvider theme={theme}>
-            <Component {...pageProps} />
+            <Header />
+            <Box marginTop={2}>
+                <Component {...pageProps} />
+            </Box>
         </ThemeProvider>
     );
 }

@@ -13,3 +13,16 @@ export interface IVehicle {
     model: string;
     ownerId: ObjectId;
 }
+
+export interface IProduct {
+    _id: string;
+    title: string;
+    url: string;
+    shortDescription: string;
+    previousPrice: number;
+    stock: number;
+    price: number;
+    productKey: string;
+    alt: string;
+    image1: string;
+}
