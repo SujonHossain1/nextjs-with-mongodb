@@ -2,6 +2,9 @@ import { orange } from '@mui/material/colors';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import type { AppProps } from 'next/app';
+import { Router } from 'next/router';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 import Header from 'src/components/Header/Header';
 import '../../styles/globals.css';
 
@@ -18,6 +21,27 @@ declare module '@mui/material/styles' {
         };
     }
 }
+NProgress.configure({
+    showSpinner: false,
+    // trickleSpeed: 300,
+    // trickle: true,
+    // trickleRate: 0.1,
+});
+
+Router.events.on('routeChangeStart', () => {
+    console.log('on start');
+    NProgress.start();
+});
+
+Router.events.on('routeChangeComplete', () => {
+    console.log('on complete');
+    NProgress.done();
+});
+
+Router.events.on('routeChangeError', () => {
+    console.log('on error');
+    NProgress.done();
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
     const theme = createTheme({

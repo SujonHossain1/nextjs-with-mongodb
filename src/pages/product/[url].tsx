@@ -30,7 +30,7 @@ export const getStaticPaths: GetStaticPaths<{ url: string }> = async () => {
     );
     const data: IProduct[] = await res.json();
 
-    const paths = data?.map((item) => {
+    const paths = data.slice(0, 6)?.map((item) => {
         return { params: { url: item.url } };
     });
 
@@ -49,6 +49,7 @@ export const getStaticProps: GetStaticProps<IProduct> = async (ctx) => {
     const product: IProduct = await res.json();
     return {
         props: product,
+        revalidate: 3,
     };
 };
 
